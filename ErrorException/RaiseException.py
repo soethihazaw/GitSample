@@ -1,35 +1,41 @@
-class ShortInputException(Exception):
+class PasswordException(Exception):
 	'''A user-defined exception class.'''
 	def __init__(self,length,atleast):
 		Exception.__init__(self)
 		self.length = length
 		self.atleast = atleast
 
-class LongInputException(Exception):
+class UpperLowerException(Exception):
 	'''A user-defined exception class.'''
-	def __init__(self,length,atleast):
+	def __init__(self,upper,lower):
 		Exception.__init__(self)
-		self.length = length
-		self.atleast = atleast
-
+		self.upper = upper
+		self.lower = lower
 try:
 	text = input('Enter something-->')
-	if len(text) < 3:
-		raise ShortInputException(len(text),3)
-	elif len(text) > 10:
-		raise LongInputException(len(text),10)
+	if len(text) < 8:
+		raise PasswordException(len(text),8)
 
-	#Other work can continue as usual here
+	elif len(text) > 72:
+		raise PasswordException(len(text),72)
+		
+	elif text == text.lower():
+		raise UpperLowerException(text,text.lower())
 
+	elif text == text.upper():
+		raise UpperLowerException(text,text.upper())
+
+#Other work can continue as usual here
 except EOFError:
 	print('Why did you do an EOF on me?')
-
-except ShortInputException as exShort:
-	print(('ShortInputException: The input was' + ' {0} long ,excepted at least {1}').format(exShort.length, exShort.atleast))
-
-except LongInputException as exLong:
-	print(('LongInputException: The input was' + ' {0} long ,excepted at least {1}').format(exLong.length, exLong.atleast))
-
+except PasswordException as exShort:
+	print(('PasswordException: The input was' + ' {0} long ,excepted at least {1}').format(exShort.length, exShort.atleast))
+except PasswordException as exLong:
+	print(('PasswordException: The input was' + ' {0} long ,excepted at least {1}').format(exLong.length, exLong.atleast))
+except UpperLowerException as Lowercase:
+	print(('UpperLowerException: You need to use atleast one Upper Case letter').format(Lowercase.upper,Lowercase.lower ))
+except UpperLowerException as Uppercase:
+	print(('UpperLowerException: You need to use atleast one Lower Case letter').format(Uppercase.upper,Uppercase.lower ))
 else:
 	print('No exception was raised.')
 
